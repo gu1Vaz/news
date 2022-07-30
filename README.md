@@ -1,4 +1,5 @@
-# News **[code in branch master]**
+# News 
+**[code in branch master]**
 
 A webapp to publish news
 
