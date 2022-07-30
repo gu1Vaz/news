@@ -6,7 +6,7 @@ The project contain:
 - Client developed in React
 - Backend developed in AdonisJs(Framework NodeJs)
 
-The idea is to have a webapp where you can register news.
+The idea is to have a webapp where you can post news.
 
 **News** was online until September 2021 and could be accessed via the url: https://news.hackin.online/
 
