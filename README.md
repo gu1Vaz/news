@@ -1,4 +1,4 @@
-# News
+# News **[code in branch master]**
 
 A webapp to publish news
 
@@ -12,6 +12,5 @@ The idea is to have a webapp where you can post news.
 
 I had to take the site down due to Umbler (platform it hosted) no longer supporting NodeJs
 
-**[code in branch master]**
 
 Created by **Guilherme Vaz**, aka **zorya** or **none gui**.
