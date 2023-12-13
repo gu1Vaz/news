@@ -6,9 +6,44 @@ export const Conteudo = styled.div`
     ${({ max }) => max < 800 ?`width:100%;`:`width:71%;`}
     max-height:90vh;
     min-height:90vh;
-    border-right:1px solid #24292E;
+    border-right:1px solid #ced4da;
     margin: 1% 3px 3px 3px;
     overflow:auto;
+`;
+export const DivRigth = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: start;
+    padding-top: 17%;
+    width: 30%;
+    a{
+        display:flex;
+        flex-direction: row;
+        align-items:center;
+        color:white;
+        h5{
+            font-weight: bold;
+            sNb1{
+                color: #09D3A6;
+            }
+            sNb2{
+                color: #0086b3;
+            }
+        }
+        img{
+            margin-left: -20px;
+        }
+    }
+`;
+export const Version = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    width: 100%;
+    height: 100%;
+    justify-content: flex-end;
+    
 `;
 export const News = styled.div`
     display: flex;
@@ -17,11 +52,6 @@ export const News = styled.div`
     width:90%;
     height:100px;
     margin-top:1%;
-    div{
-        img{
-            object-fit:cover;
-        }
-    }
     a{
         display: flex;
         flex-direction: row;

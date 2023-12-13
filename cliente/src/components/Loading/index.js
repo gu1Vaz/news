@@ -9,6 +9,9 @@ const Loading = (props) => {
     if(props.isPage){
       ref.current.style.minHeight = "80vh";
     }
+    if(props.noMax){
+      ref.current.style.width = "25px";
+    }
   })
   return (
        <Container ref={ref}>
@@ -19,7 +22,7 @@ const Loading = (props) => {
               </Icone>
             }
            <div style={{height:"25px",width:"25px",fontSize:"7px"}}
-                class="spinner-border text-dark" role="status"/>
+                className="spinner-border text-dark" role="status"/>
        </Container>
   )
 }

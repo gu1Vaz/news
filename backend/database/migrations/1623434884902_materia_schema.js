@@ -11,6 +11,7 @@ class MateriaSchema extends Schema {
 
       table.string('image_url',256).notNullable();
       table.string('vet_images',1000).nullable();
+      table.string('vet_files',1000).nullable();
       table.string('vet_links',500).nullable();
       table.string('title', 254).notNullable()
       table.string('subtitle', 254).notNullable()
@@ -18,8 +19,9 @@ class MateriaSchema extends Schema {
       table.string('intro', 900).notNullable()
       table.string('dev', 2500).notNullable()
       table.string('coc', 900).notNullable()
-
+      table.integer('num_comments').defaultTo(0)
       table.string('creador', 25).notNullable()
+      table.integer('admin_id').unsigned().references('id').inTable('admins')
       table.timestamps()
     })
   }

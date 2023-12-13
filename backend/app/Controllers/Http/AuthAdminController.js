@@ -13,6 +13,7 @@ class AuthAdminController {
       retorno.token = token.token
       retorno.user = user.username;
       retorno.id = user.id;
+      retorno.image_url = user.image_url;
     } else {
       retorno.data = "E-mail ou senha Incorretos";
     }

@@ -3,12 +3,13 @@
 const User = use("App/Models/User");
 
 class AuthController {
-    async registrar({ request }) {
+    
+    async registrar({ request, auth }) {
         const data = request.only(["username", "email", "password"]);
 
-        const user = await User.create(data);
+        await User.create(data);
 
-        return user;
+        return this.autenticar({request, auth});
     }
 
     async autenticar({ request, auth }) {
@@ -20,10 +21,15 @@ class AuthController {
             retorno.token = token.token
             retorno.user = user.username;
             retorno.id = user.id;
+            retorno.image_url = user.image_url;
         } else {
             retorno.data = "E-mail ou senha Incoretos";
         }
         return retorno;
+    }
+    async switch_password({ user, new_password }) {
+        user.password = new_password;
+        await user.save();
     }
 }
 

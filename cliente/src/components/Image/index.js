@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, lazy } from 'react';
 import {Container, Modal, Conteudo, Background, BotaoFechar} from './styles';
 import Loading from "../../components/Loading";
 import {GrClose} from 'react-icons/gr';
@@ -26,7 +26,7 @@ const ImagePreview = (props) => {
   })
   return (
     <>
-        <Background />,
+        <Background />
         <Modal onClick={close} className="fixed-bottom">
           <Conteudo className="m-2 mb-3" onWheel={zoom}>
               {props.is}
@@ -43,9 +43,13 @@ const Image = (props) => {
   const [loading, setLoading] = useState(true)
   const [preview, setPreview] = useState(false)
 
+
   useEffect(() => {
     if(props.max && !loading){
       divRef.current.style.width= "100%";
+    }
+    if(props.rounded && !loading){
+      divRef.current.style.borderRadius = "50%";
     }
   })
   const onLoaded = () =>{
@@ -55,15 +59,22 @@ const Image = (props) => {
   const image =<img src={props.link} alt="" ref={ref}
                     style={{display:"none",height:props.h,width:props.w}}
                     onLoad={onLoaded}
-                    onClick={()=>setPreview(true)}
-                    onDoubleClick={()=>setPreview(true)} />
+                    onClick={props.disablePreview ? null: ()=>setPreview(true)}
+                    onDoubleClick={props.disablePreview ? null: ()=>setPreview(true)} />
+  let imagePre = (!props.disablePreview) ? <ImagePreview close={()=>setPreview(false)} is={image} isRef={ref}/>:null;
   return (
+    
        <Container ref={divRef}>
           {loading && <Loading />}
           {image}
-          {preview && <ImagePreview close={()=>setPreview(false)} is={image} isRef={ref}/>}
+          {preview && imagePre}
        </Container>
   )
 }
 
-export default Image
+const LazyImage = lazy(() => {
+  return new Promise(resolve => {
+    setTimeout(() => resolve({ default: Image }), 500);
+  });
+});
+export default LazyImage

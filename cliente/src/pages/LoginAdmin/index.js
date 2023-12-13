@@ -23,8 +23,10 @@ export default class LoginAdmin extends Component {
             localStorage.setItem('token', response.data.token);
             localStorage.setItem('user', response.data.user);
             localStorage.setItem('id', response.data.id);
+            if(response.data.image_url) localStorage.setItem('image_url', response.data.image_url);;
+            localStorage.setItem('ademir', 1);
             this.setState({ loading: false });
-            this.props.history.push('/');
+            this.props.navigate('/');
         } catch (error) {
             toast.error('E-mail ou senha incorretos');
             this.setState({ loading: false });

@@ -1,46 +1,15 @@
 'use strict'
 
 const Materia = use("App/Models/Materia");
+const Admin = use("App/Models/Admin");
 const Helpers = use('Helpers');
+const MoveFiles = use('App/Models/Traits/MoveFiles');
 
 class MateriaController {
-
-  async moveImage(image,path,path2){
-    let imageLink = "https://hackin.online/"+path2+image.stream.filename;
-    
-    await image.move(path,{
-        overwrite: true
-    });
-    
-    if (!image.moved()) {
-      return image.error()
-    }
-    return imageLink;
+  constructor() {
+    this.moveFiles = new MoveFiles();
   }
-  
-  async moveImagesVet(vetImages,path,path2){
-    let vetImagesLinks = ""
-    if(!vetImages) return null;
 
-    else if(!vetImages.files){
-      await vetImages.move(path,{
-          overwrite: true
-      });
-      vetImagesLinks += "https://hackin.online/"+ path2 +vetImages.stream.filename+"<newline>";
-    }
-    else{
-      await vetImages.moveAll(path,(file)=>{
-        vetImagesLinks += "https://hackin.online/"+ path2 +file.stream.filename+"<newline>";
-        return {
-          overwrite: true
-        }
-       });
-       if (!vetImages.movedAll()) {
-        return vetImages.errors()
-        }
-    }
-    return vetImagesLinks;
-  }
   async index ({  }) {
     const news = await Materia.query()
     .select('route_id','image_url','title', 'subtitle','creador',"created_at")
@@ -48,22 +17,32 @@ class MateriaController {
     .limit(15).fetch()
     return news;
   }
+  async getCreadores ({  }) {
+    const criadores = await Admin.query()
+    .select('username')
+    .orderBy('created_at','desc')
+    .fetch()
+    return criadores;
+  }
 
   
   async create ({ request, response, view }) {
   }
 
   
-  async store ({ auth, request, response }) {
-    await auth.getUser()
-    const data = request.only(["title","subtitle","creador","route_id","intro","dev","coc"]);
+  async store ({ auth, request }) {
+    const user = await auth.getUser()
+    const data = request.only(["title","subtitle","route_id","intro","dev","coc"]);
+    data.creador = user.username;
     data.vet_links = request.input("vetLinks");
     
-    const path = Helpers.publicPath('uploads/'+data.route_id);
-    const path2 = 'uploads/'+data.route_id+"/";
+    const pathFull = Helpers.publicPath('uploads/'+data.route_id);
+    const path = 'uploads/'+data.route_id+"/";
 
-    data.image_url = await this.moveImage(request.file("image"),path,path2);
-    data.vet_images = await this.moveImagesVet(request.file("vetImages"),path,path2);
+    data.image_url = await this.moveFiles.one(request.file("image"),pathFull,path);
+    data.vet_images = await this.moveFiles.all(request.file("vetImages"),pathFull,path);
+    data.vet_files = await this.moveFiles.all(request.file("vetFiles"),pathFull,path);
+    
 
     const materia = await Materia.create(data);
     return materia;

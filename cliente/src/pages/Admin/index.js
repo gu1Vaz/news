@@ -9,13 +9,14 @@ export default class Admin extends Component {
      this.state={
          title:'',
          subtitle:'',
-         creador:'',
+         creador: localStorage.getItem("user"),
          route_id:'',
          intro : '',
          dev : '',
          conc : '',
          image:null,
          vetImages:[],
+         vetFiles:[],
          vetLinks:'',
          cout:0,
          nameCout:'None',
@@ -66,6 +67,9 @@ export default class Admin extends Component {
   [...this.state.vetImages].forEach(image => {
     data.append("vetImages",image)
   });
+  [...this.state.vetFiles].forEach(file => {
+    data.append("vetFiles",file)
+  });
   try{
       await api.post(`/news/`,data);
       toast.success('Sucesso bro');
@@ -86,7 +90,8 @@ export default class Admin extends Component {
   await this.setState({ image });
  };
  fileSelectedHandler = async (e) => {
-  await this.setState({ vetImages: [...this.state.vetImages, ...e.target.files] })
+  if(e.target.id === "vetImages") await this.setState({ vetImages: [...this.state.vetImages, ...e.target.files] })
+  if(e.target.id === "vetFiles") await this.setState({ vetFiles: [...this.state.vetFiles, ...e.target.files] })
  }
  render() {
    const {cout, nameCout, maxCout} = this.state;
@@ -96,27 +101,27 @@ export default class Admin extends Component {
               <Coluna>
                 <h6>Rota:</h6>
                 <Input className="form-group">
-                    <input name="route_id" class="form-control w-100"  
+                    <input autoFocus={true} name="route_id" className="form-control w-100"  
                                 onChange={this.handleChange} value={this.state.route_id}/>
                 </Input>
                 <h6>Titulo</h6>
                 <Input className="form-group">
-                    <input name="title" class="form-control w-100"  
+                    <input name="title" className="form-control w-100"  
                                 onChange={this.handleChange} value={this.state.title}/>
                 </Input>
                 <h6>SubTitulo</h6>
                 <Input className="form-group">
-                    <input name="subtitle" class="form-control w-100"  
+                    <input name="subtitle" className="form-control w-100"  
                                 onChange={this.handleChange} value={this.state.subtitle}/>
                 </Input>
                 <h6>Criador</h6>
                 <Input className="form-group">
-                    <input name="creador" class="form-control w-100"  
+                    <input name="creador" className="form-control w-100"  
                                 onChange={this.handleChange} value={this.state.creador}/>
                 </Input>
                 <h6>Links</h6>
                 <TextArea className="form-group">
-                    <textarea name="vetLinks" class="form-control w-100"   rows="6"
+                    <textarea name="vetLinks" className="form-control w-100"   rows="6"
                                 onChange={this.handleChange}
                                 onKeyPress={this.addLink}  value={this.state.vetLinks}/>
                 </TextArea>
@@ -124,13 +129,13 @@ export default class Admin extends Component {
               <Coluna>
                 <h6>Introdução</h6>
                 <TextArea className="form-group">
-                    <textarea name="intro" class="form-control w-100"   rows="8"
+                    <textarea name="intro" className="form-control w-100"   rows="8"
                                 onChange={this.handleChange}
                                 onKeyPress={this.addLine} value={this.state.intro}/>
                 </TextArea>
                 <h6>Desenvolvimento</h6>
                 <TextArea className="form-group">
-                    <textarea name="dev" class="form-control w-100"   rows="8"
+                    <textarea name="dev" className="form-control w-100"   rows="8"
                                 onChange={this.handleChange} 
                                 onKeyPress={this.addLine} value={this.state.dev}/>
                 </TextArea>
@@ -138,7 +143,7 @@ export default class Admin extends Component {
               <Coluna>
                 <h6>Conclusão</h6>
                 <TextArea className="form-group">
-                    <textarea name="conc" class="form-control w-100"   rows="8"
+                    <textarea name="conc" className="form-control w-100"   rows="8"
                                 onChange={this.handleChange}
                                 onKeyPress={this.addLine} value={this.state.conc}/>
                 </TextArea>
@@ -147,8 +152,10 @@ export default class Admin extends Component {
                     <input accept="image/png, image/jpeg"  
                            ref={this.fileInput} name="image" type="file" 
                            onChange={this.handleImageChange}/>
-                    <input type="file" multiple onChange={this.fileSelectedHandler} />
+                    <input id="vetImages" type="file" multiple onChange={this.fileSelectedHandler} />
                 </ImagesArea>
+                <h6>Payload</h6>
+                <input className='mb-2' id="vetFiles" type="file" multiple onChange={this.fileSelectedHandler} />
                 <button className="btn btn-success" onClick={this.handleSubmit}>Criar</button>
                 <div className="mt-2">
                   {nameCout+":"+cout}

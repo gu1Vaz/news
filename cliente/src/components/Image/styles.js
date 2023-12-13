@@ -5,6 +5,12 @@ export const Container = styled.div`
         cursor:pointer;
     }
 `;
+export const Img = styled.div`
+    img{
+        margin-right:1%;
+        cursor:pointer;
+    }
+`;
 export const Modal = styled.div`
     display: flex;
     flex-direction: row;
@@ -29,6 +35,7 @@ export const Background = styled.div`
     align-items:center;
     background: black;
     opacity: 0.5;
+    z-index: 1;
     margin:0 !important;
 `;
 export const Conteudo = styled.div`
